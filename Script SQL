@@ -1,0 +1,331 @@
+-- Generado por Oracle SQL Developer Data Modeler 24.3.1.351.0831
+--   en:        2025-09-30 08:17:25 ECT
+--   sitio:      SQL Server 2012
+--   tipo:      SQL Server 2012
+
+
+
+CREATE TABLE chofer 
+    (
+     ID_Empleado INTEGER NOT NULL , 
+     idEmpleado INTEGER NOT NULL , 
+     numeroLicencia INTEGER NOT NULL , 
+     categoriaLicencia VARCHAR (5) NOT NULL 
+    )
+GO
+
+ALTER TABLE chofer ADD CONSTRAINT Chofer_PK PRIMARY KEY CLUSTERED (ID_Empleado)
+     WITH (
+     ALLOW_PAGE_LOCKS = ON , 
+     ALLOW_ROW_LOCKS = ON )
+GO
+ALTER TABLE chofer ADD CONSTRAINT Chofer_PKv1 UNIQUE NONCLUSTERED (idEmpleado)
+GO
+
+CREATE TABLE choferVehiculo 
+    (
+     Chofer_ID_Empleado INTEGER NOT NULL , 
+     Vehiculo_ID_Vehiculo INTEGER NOT NULL 
+    )
+GO
+
+ALTER TABLE choferVehiculo ADD CONSTRAINT CHOFER_VEHICULO_PK PRIMARY KEY CLUSTERED (Chofer_ID_Empleado, Vehiculo_ID_Vehiculo)
+     WITH (
+     ALLOW_PAGE_LOCKS = ON , 
+     ALLOW_ROW_LOCKS = ON )
+GO
+
+CREATE TABLE empleados 
+    (
+     idEmpleado INTEGER NOT NULL , 
+     cedulaEmpleado INTEGER NOT NULL , 
+     nombreEmpleado VARCHAR (50) NOT NULL , 
+     apellidoEmpleado VARCHAR (50) NOT NULL , 
+     correEmpleado VARCHAR (50) NOT NULL , 
+     telefonoEmpleado VARCHAR (50) NOT NULL , 
+     tipoEmpledo VARCHAR (50) NOT NULL , 
+     estadoEmpleado VARCHAR (50) NOT NULL , 
+     Emrpesa_RUC INTEGER NOT NULL 
+    )
+GO
+
+ALTER TABLE empleados ADD CONSTRAINT Empleados_PK PRIMARY KEY CLUSTERED (idEmpleado)
+     WITH (
+     ALLOW_PAGE_LOCKS = ON , 
+     ALLOW_ROW_LOCKS = ON )
+GO
+
+CREATE TABLE emrpesa 
+    (
+     ruc INTEGER NOT NULL , 
+     razonSocial VARCHAR (50) NOT NULL , 
+     direccion VARCHAR (100) NOT NULL , 
+     telefono VARCHAR (10) NOT NULL , 
+     TipoEmpresa VARCHAR (100) NOT NULL 
+    )
+GO
+
+ALTER TABLE emrpesa ADD CONSTRAINT Emrpesa_PK PRIMARY KEY CLUSTERED (ruc)
+     WITH (
+     ALLOW_PAGE_LOCKS = ON , 
+     ALLOW_ROW_LOCKS = ON )
+GO
+
+CREATE TABLE equipoGPS 
+    (
+     idGPS INTEGER NOT NULL , 
+     celuarEquipo VARCHAR (100) NOT NULL , 
+     simEquipo VARCHAR (25) NOT NULL , 
+     fabricanteEquipo VARCHAR (25) NOT NULL , 
+     modeloEquipo VARCHAR (50) NOT NULL , 
+     protocoloEquipo VARCHAR (100) NOT NULL , 
+     estadoEquipo VARCHAR (100) NOT NULL , 
+     fechaCompra DATE NOT NULL , 
+     tipoEquipo VARCHAR (100) NOT NULL 
+    )
+GO
+
+ALTER TABLE equipoGPS ADD CONSTRAINT EquipoGPS_PK PRIMARY KEY CLUSTERED (idGPS)
+     WITH (
+     ALLOW_PAGE_LOCKS = ON , 
+     ALLOW_ROW_LOCKS = ON )
+GO
+
+CREATE TABLE tecnico 
+    (
+     ID_Empleado INTEGER NOT NULL , 
+     idEmpleado INTEGER NOT NULL , 
+     certificacionTecnica IMAGE NOT NULL , 
+     areTecnica VARCHAR (50) NOT NULL 
+    )
+GO
+
+ALTER TABLE tecnico ADD CONSTRAINT Tecnico_PK PRIMARY KEY CLUSTERED (ID_Empleado)
+     WITH (
+     ALLOW_PAGE_LOCKS = ON , 
+     ALLOW_ROW_LOCKS = ON )
+GO
+ALTER TABLE tecnico ADD CONSTRAINT Tecnico_PKv1 UNIQUE NONCLUSTERED (idEmpleado)
+GO
+
+CREATE TABLE tecnicoEquipoGPS 
+    (
+     Tecnico_ID_Empleado INTEGER NOT NULL , 
+     EquipoGPS_ID_GPS INTEGER NOT NULL 
+    )
+GO
+
+ALTER TABLE tecnicoEquipoGPS ADD CONSTRAINT TECNICO_EQUIPOGPS_PK PRIMARY KEY CLUSTERED (Tecnico_ID_Empleado, EquipoGPS_ID_GPS)
+     WITH (
+     ALLOW_PAGE_LOCKS = ON , 
+     ALLOW_ROW_LOCKS = ON )
+GO
+
+CREATE TABLE vehiculo 
+    (
+     idVehiculo INTEGER NOT NULL , 
+     colorVehiculo VARCHAR (15) NOT NULL , 
+     placaVehiculo VARCHAR (6) NOT NULL , 
+     marcaVehiculo VARCHAR (25) NOT NULL , 
+     modeloVehiculo VARCHAR (25) NOT NULL , 
+     estadoVehiculo VARCHAR (100) NOT NULL , 
+     fechaCompra DATE NOT NULL , 
+     capacidadCardga INTEGER NOT NULL , 
+     tipoVehiculo VARCHAR (25) NOT NULL , 
+     Emrpesa_RUC INTEGER NOT NULL , 
+     Vehiculo_ID_Vehiculo INTEGER NOT NULL 
+    )
+GO
+
+ALTER TABLE vehiculo ADD CONSTRAINT Vehiculo_PK PRIMARY KEY CLUSTERED (idVehiculo)
+     WITH (
+     ALLOW_PAGE_LOCKS = ON , 
+     ALLOW_ROW_LOCKS = ON )
+GO
+
+CREATE TABLE vehiculoEquipoGPS 
+    (
+     Vehiculo_ID_Vehiculo INTEGER NOT NULL , 
+     EquipoGPS_ID_GPS INTEGER NOT NULL 
+    )
+GO
+
+ALTER TABLE vehiculoEquipoGPS ADD CONSTRAINT VEHICULO_EQUIPOGPS_PK PRIMARY KEY CLUSTERED (Vehiculo_ID_Vehiculo, EquipoGPS_ID_GPS)
+     WITH (
+     ALLOW_PAGE_LOCKS = ON , 
+     ALLOW_ROW_LOCKS = ON )
+GO
+
+ALTER TABLE chofer 
+    ADD CONSTRAINT Chofer_Empleados_FK FOREIGN KEY 
+    ( 
+     ID_Empleado
+    ) 
+    REFERENCES empleados 
+    ( 
+     idEmpleado 
+    ) 
+    ON DELETE NO ACTION 
+    ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE choferVehiculo 
+    ADD CONSTRAINT CHOFER_VEHICULO_Chofer_FK FOREIGN KEY 
+    ( 
+     Chofer_ID_Empleado
+    ) 
+    REFERENCES chofer 
+    ( 
+     ID_Empleado 
+    ) 
+    ON DELETE NO ACTION 
+    ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE choferVehiculo 
+    ADD CONSTRAINT CHOFER_VEHICULO_Vehiculo_FK FOREIGN KEY 
+    ( 
+     Vehiculo_ID_Vehiculo
+    ) 
+    REFERENCES vehiculo 
+    ( 
+     idVehiculo 
+    ) 
+    ON DELETE NO ACTION 
+    ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE empleados 
+    ADD CONSTRAINT Empleados_Emrpesa_FK FOREIGN KEY 
+    ( 
+     Emrpesa_RUC
+    ) 
+    REFERENCES emrpesa 
+    ( 
+     ruc 
+    ) 
+    ON DELETE NO ACTION 
+    ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE tecnico 
+    ADD CONSTRAINT Tecnico_Empleados_FK FOREIGN KEY 
+    ( 
+     ID_Empleado
+    ) 
+    REFERENCES empleados 
+    ( 
+     idEmpleado 
+    ) 
+    ON DELETE NO ACTION 
+    ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE tecnicoEquipoGPS 
+    ADD CONSTRAINT TECNICO_EQUIPOGPS_EquipoGPS_FK FOREIGN KEY 
+    ( 
+     EquipoGPS_ID_GPS
+    ) 
+    REFERENCES equipoGPS 
+    ( 
+     idGPS 
+    ) 
+    ON DELETE NO ACTION 
+    ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE tecnicoEquipoGPS 
+    ADD CONSTRAINT TECNICO_EQUIPOGPS_Tecnico_FK FOREIGN KEY 
+    ( 
+     Tecnico_ID_Empleado
+    ) 
+    REFERENCES tecnico 
+    ( 
+     ID_Empleado 
+    ) 
+    ON DELETE NO ACTION 
+    ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE vehiculo 
+    ADD CONSTRAINT Vehiculo_Emrpesa_FK FOREIGN KEY 
+    ( 
+     Emrpesa_RUC
+    ) 
+    REFERENCES emrpesa 
+    ( 
+     ruc 
+    ) 
+    ON DELETE NO ACTION 
+    ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE vehiculoEquipoGPS 
+    ADD CONSTRAINT VEHICULO_EQUIPOGPS_EquipoGPS_FK FOREIGN KEY 
+    ( 
+     EquipoGPS_ID_GPS
+    ) 
+    REFERENCES equipoGPS 
+    ( 
+     idGPS 
+    ) 
+    ON DELETE NO ACTION 
+    ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE vehiculoEquipoGPS 
+    ADD CONSTRAINT VEHICULO_EQUIPOGPS_Vehiculo_FK FOREIGN KEY 
+    ( 
+     Vehiculo_ID_Vehiculo
+    ) 
+    REFERENCES vehiculo 
+    ( 
+     idVehiculo 
+    ) 
+    ON DELETE NO ACTION 
+    ON UPDATE NO ACTION 
+GO
+
+ALTER TABLE vehiculo 
+    ADD CONSTRAINT Vehiculo_Vehiculo_FK FOREIGN KEY 
+    ( 
+     Vehiculo_ID_Vehiculo
+    ) 
+    REFERENCES vehiculo 
+    ( 
+     idVehiculo 
+    ) 
+    ON DELETE NO ACTION 
+    ON UPDATE NO ACTION 
+GO
+
+
+
+-- Informe de Resumen de Oracle SQL Developer Data Modeler: 
+-- 
+-- CREATE TABLE                             9
+-- CREATE INDEX                             0
+-- ALTER TABLE                             22
+-- CREATE VIEW                              0
+-- ALTER VIEW                               0
+-- CREATE PACKAGE                           0
+-- CREATE PACKAGE BODY                      0
+-- CREATE PROCEDURE                         0
+-- CREATE FUNCTION                          0
+-- CREATE TRIGGER                           0
+-- ALTER TRIGGER                            0
+-- CREATE DATABASE                          0
+-- CREATE DEFAULT                           0
+-- CREATE INDEX ON VIEW                     0
+-- CREATE ROLLBACK SEGMENT                  0
+-- CREATE ROLE                              0
+-- CREATE RULE                              0
+-- CREATE SCHEMA                            0
+-- CREATE SEQUENCE                          0
+-- CREATE PARTITION FUNCTION                0
+-- CREATE PARTITION SCHEME                  0
+-- 
+-- DROP DATABASE                            0
+-- 
+-- ERRORS                                   0
+-- WARNINGS                                 0
